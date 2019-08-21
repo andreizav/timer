@@ -1,0 +1,103 @@
+import { Component, HostListener} from '@angular/core';
+import {  Subscription, interval, fromEvent, empty } from 'rxjs';
+import { mapTo, scan, switchMap, map} from 'rxjs/operators';
+
+class Time {
+  hour: string = '00';
+  minute: string = '00';
+  sec: string = '00';
+  totalSec: number = 0;
+  currentTime?: number = new Date().getTime(); // needed if want count ticks after browser is closed
+
+  constructor(time?) {
+    if(time) {
+      this.hour = time.hour;
+      this.minute = time.minute;
+      this.sec = time.sec
+      this.totalSec = time.totalSec;
+      this.currentTime = time.currentTime ;
+    }
+  }
+}
+
+@Component({
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  time: Time;
+  listTime: Time[] = [];
+  runningStatus: boolean = false;
+  private subscription: Subscription;
+
+  @HostListener('window:beforeunload')
+  saveToLocal() {
+    window.localStorage.setItem("timeData", JSON.stringify({
+      current: this.time,
+      list: this.listTime.map((time:Time) => time.totalSec)
+    }));
+  }
+
+  constructor() {}
+
+  ngOnInit() {
+    const storageData = JSON.parse(window.localStorage.getItem("timeData"));
+    if(storageData) {
+      this.time = storageData.current;
+      this.listTime = storageData.list.map((totalSec:number) => this.secToTime(totalSec, new Time()));
+      console.log(this.listTime);
+
+      // needed if want count ticks after browser is closed
+      // this.startTimer(Math.round((new Date().getTime() - storageData.current.currentTime) / 1000));
+
+      this.startTimer(storageData.current.totalSec);
+    } else {
+      this.time = new Time();
+      this.startTimer(0);
+    }
+  }
+
+  startTimer(startTimerFrom: number): void {
+    const interval$ = interval(1000).pipe(mapTo(1));
+    this.subscription = fromEvent(document.getElementById('playBtn'), 'click')
+      .pipe(
+        map(() => this.runningStatus = !this.runningStatus),
+        switchMap(val => (val ? interval$ : empty())),
+        scan((res: number, step: number) => res + step, startTimerFrom)
+      ).subscribe((sec: number) => this.secToTime(sec, this.time));
+
+      // needed if want start count automaticly after browser reopened
+      // if(startTimerFrom) document.getElementById('playBtn').click()
+  }
+
+  stopTimer(): void {
+    this.listTime = [];
+    this.time = new Time();
+    this.subscription.unsubscribe();
+    this.runningStatus = false;
+    this.startTimer(0);
+  }
+
+  secToTime(sec: number, time: Time): Time {
+    let hours = Math.floor(sec / 3600).toString();
+    let minutes = Math.floor((sec - (+hours * 3600)) / 60).toString();
+    let seconds = (sec - (+hours * 3600) - (+minutes * 60)).toString();
+
+    if (+hours < 10) { hours = "0" + hours; }
+    if (+minutes < 10) { minutes = "0" + minutes; }
+    if (+seconds < 10) { seconds = "0" + seconds; }
+
+    time.totalSec = sec;
+    time.sec = seconds;
+    time.minute = minutes;
+    time.hour = hours;
+
+    return time;
+  }
+
+  save(): void {
+    this.listTime.push({...this.time});
+  }
+}
+

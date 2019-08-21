@@ -1,0 +1,74 @@
+
+ /*DIGITAL CLOCK FONT*/
+@font-face{
+  font-family:'digital-7';
+  src: url('../fonts/digital-7.ttf');
+ }
+ 
+ * {
+   margin: 0;
+   padding: 0;
+ }
+ 
+ main {
+   text-align: center;
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%,-50%);
+     border-radius: 10px;
+    background-color: #242424;
+    font-family: 'digital-7', sans-serif;
+ }
+ 
+ /* CLOCK */
+ div.clock {
+   margin: 5px 0;
+   padding: 30px;
+ }
+ 
+ div.clock div{
+   display: inline-block;
+   position: relative;
+ }
+ 
+ div.clock div p{
+   font-size: 100px;
+   position: relative;
+   z-index: 100;
+ }
+
+ div.clock div p:first-of-type {
+  color: #80d92f;
+ }
+ 
+ div.clock p.placeholder {
+   color: #334522;
+   position: absolute!important;
+   top: 0!important;
+   z-index: 50!important;
+ }/*END CLOCK*/
+ 
+ /*CLASS THAT CHANGES COLOR OF TEXT TO APPEAR LIKE ITS "ON"*/
+ div.clock .placeholder.light-on {
+   color: yellow;
+ }
+
+ footer {
+  background: #fff;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+ }
+
+ footer button {
+   flex: 1;
+   height: 50px;
+   background: transparent;
+   border: none;
+   border-left:1px solid #242424;
+ }
+
+ footer button:first-of-type {
+   flex: 3;
+   border-left: none;
+ }

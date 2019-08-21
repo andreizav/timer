@@ -1,0 +1,45 @@
+<div class="wrapper">
+	<main>
+		<div class="clock">
+			<!-- HOUR -->
+			<div class="numbers">
+				<p class="hours">{{time.hour}}</p>
+				<p class="placeholder">88</p>
+			</div>
+	
+			<div class="colon">
+				<p>:</p>
+			</div>
+	
+			<!-- MINUTE -->
+			<div class="numbers">
+				<p class="minutes">{{time.minute}}</p>
+				<p class="placeholder">88</p>
+			</div>
+	
+			<div class="colon">
+				<p>.</p>
+			</div>
+	
+			<!-- SECOND -->
+			<div class="numbers">
+				<p class="seconds">{{time.sec}}</p>
+				<p class="placeholder">88</p>
+			</div>
+	
+		</div><!-- END CLOCK -->
+
+		<footer>
+				<button id="playBtn">
+						<i [ngClass]="{'fa-pause':runningStatus, 'fa-play':!runningStatus}" class="fa"></i>
+					<span [innerHTML]="runningStatus?'Pause':'Play'"></span>
+				</button>
+				
+				<button (click)="save()"><i class="fas fa-stopwatch"></i></button>
+				<button (click)="stopTimer()"><i class="fa fa-trash"></i></button>
+		</footer>
+	</main>
+
+	<div *ngFor="let time of listTime">{{time.sec}}</div>
+</div>
+
