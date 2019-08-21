@@ -1,0 +1,27 @@
+ /* CLOCK */
+ div.clock {
+    margin: 5px 0;
+  }
+  
+  div.clock div{
+    display: inline-block;
+    position: relative;
+  }
+  
+  div.clock div p{
+    font-size: 100px;
+    position: relative;
+    z-index: 100;
+    margin: 0;
+  }
+ 
+  div.clock div p:first-of-type {
+   /* color: #80d92f; */
+  }
+  
+  div.clock p.placeholder {
+    /* color: #334522; */
+    position: absolute!important;
+    top: 0!important;
+    z-index: 50!important;
+  }/*END CLOCK*/

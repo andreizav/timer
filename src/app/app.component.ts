@@ -1,24 +1,8 @@
 import { Component, HostListener} from '@angular/core';
 import {  Subscription, interval, fromEvent, empty } from 'rxjs';
 import { mapTo, scan, switchMap, map} from 'rxjs/operators';
-
-class Time {
-  hour: string = '00';
-  minute: string = '00';
-  sec: string = '00';
-  totalSec: number = 0;
-  currentTime?: number = new Date().getTime(); // needed if want count ticks after browser is closed
-
-  constructor(time?) {
-    if(time) {
-      this.hour = time.hour;
-      this.minute = time.minute;
-      this.sec = time.sec
-      this.totalSec = time.totalSec;
-      this.currentTime = time.currentTime ;
-    }
-  }
-}
+import { Time } from './models/time.model';
+import { ClockSettings } from './models/clockSettings.Interface'
 
 @Component({
   selector: 'my-app',
@@ -30,6 +14,11 @@ export class AppComponent {
   listTime: Time[] = [];
   runningStatus: boolean = false;
   private subscription: Subscription;
+
+  mainClockSettings: ClockSettings = {
+    timeColor: "#80d92f",
+    placeholderColor: "#334522"
+  };
 
   @HostListener('window:beforeunload')
   saveToLocal() {
@@ -98,6 +87,10 @@ export class AppComponent {
 
   save(): void {
     this.listTime.push({...this.time});
+  }
+
+  removeFromList(time: Time): void {
+    this.listTime.splice(this.listTime.indexOf(time), 1);
   }
 }
 
