@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Time } from '../models/time.model';
 import { ClockSettings } from '../models/clockSettings.Interface'
 
@@ -6,7 +6,7 @@ import { ClockSettings } from '../models/clockSettings.Interface'
   selector: 'list-item',
   template: `
     <div class="list">
-        <div *ngFor="let time of listTime">
+        <div *ngFor="let time of listTime" class="item">
             <clock  [time]="time" [settings]="listClockSettings"></clock>
             <button (click)="remove.emit(time)">remove</button>
         </div>       
@@ -15,11 +15,11 @@ import { ClockSettings } from '../models/clockSettings.Interface'
   styleUrls: ['./listItem.cmp.css']
 })
 export class ListItemComponent {
-    @Input() listTime: Time[];
-    @Output() remove: EventEmitter<any> = new EventEmitter()
-    listClockSettings: ClockSettings = {
-        timeColor: "#fff",
-        placeholderColor: "#454545"
-      };
+  @Input() listTime: Time[];
+  @Output() remove: EventEmitter<any> = new EventEmitter()
+  listClockSettings: ClockSettings = {
+    timeColor: "#fff",
+    placeholderColor: "#454545"
+  };
 }
 

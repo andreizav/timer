@@ -1,12 +1,29 @@
-import { Component, HostListener} from '@angular/core';
-import {  Subscription, interval, fromEvent, empty } from 'rxjs';
-import { mapTo, scan, switchMap, map} from 'rxjs/operators';
+import { Component, HostListener } from '@angular/core';
+import { Subscription, interval, fromEvent, empty } from 'rxjs';
+import { mapTo, scan, switchMap, map } from 'rxjs/operators';
 import { Time } from './models/time.model';
 import { ClockSettings } from './models/clockSettings.Interface'
 
 @Component({
   selector: 'my-app',
-  templateUrl: './app.component.html',
+  template: `
+  <div class="wrapper">
+    <main>
+      <div class="main_clock">
+        <clock [time]="time" [settings]="mainClockSettings"></clock>
+      </div>
+      <nav>
+        <button id="playBtn">
+          <i [ngClass]="{'fa-pause':runningStatus, 'fa-play':!runningStatus}" class="fa"></i>
+          <span [innerHTML]="runningStatus?'Pause':'Play'"></span>
+        </button>
+        <button (click)="save()"><i class="fa fa-clock-o"></i></button>
+        <button (click)="stopTimer()"><i class="fa fa-trash-o"></i></button>
+      </nav>
+      <list-item [listTime]="listTime" (remove)="removeFromList($event)"></list-item>
+    </main>
+  </div>
+  `,
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
@@ -24,18 +41,17 @@ export class AppComponent {
   saveToLocal() {
     window.localStorage.setItem("timeData", JSON.stringify({
       current: this.time,
-      list: this.listTime.map((time:Time) => time.totalSec)
+      list: this.listTime.map((time: Time) => time.totalSec)
     }));
   }
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
     const storageData = JSON.parse(window.localStorage.getItem("timeData"));
-    if(storageData) {
+    if (storageData) {
       this.time = storageData.current;
-      this.listTime = storageData.list.map((totalSec:number) => this.secToTime(totalSec, new Time()));
-      console.log(this.listTime);
+      this.listTime = storageData.list.map((totalSec: number) => this.secToTime(totalSec, new Time()));
 
       // needed if want count ticks after browser is closed
       // this.startTimer(Math.round((new Date().getTime() - storageData.current.currentTime) / 1000));
@@ -56,8 +72,8 @@ export class AppComponent {
         scan((res: number, step: number) => res + step, startTimerFrom)
       ).subscribe((sec: number) => this.secToTime(sec, this.time));
 
-      // needed if want start count automaticly after browser reopened
-      // if(startTimerFrom) document.getElementById('playBtn').click()
+    // needed if want start count automaticly after browser reopened
+    // if(startTimerFrom) document.getElementById('playBtn').click()
   }
 
   stopTimer(): void {
@@ -86,7 +102,7 @@ export class AppComponent {
   }
 
   save(): void {
-    this.listTime.push({...this.time});
+    this.listTime.unshift({ ...this.time });
   }
 
   removeFromList(time: Time): void {

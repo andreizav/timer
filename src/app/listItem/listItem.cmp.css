@@ -1,5 +1,27 @@
-.list clock{
-    display:block;
-    border-bottom: 1px solid #fff; 
+.list {
+    display:block;    
     text-align: left;
+    margin-top: 20px;
+  }
+
+  .list .item {
+    border-bottom: 1px solid #4b4b4b; 
+    padding: 20px 0 ;
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .list .item:hover button {
+    display: block;
+  }
+
+  .list .item button {
+    display: none;
+    height: 25px;
+    background: red;
+    color: #fff;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
   }

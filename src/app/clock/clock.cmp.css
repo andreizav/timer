@@ -14,10 +14,6 @@
     z-index: 100;
     margin: 0;
   }
- 
-  div.clock div p:first-of-type {
-   /* color: #80d92f; */
-  }
   
   div.clock p.placeholder {
     /* color: #334522; */

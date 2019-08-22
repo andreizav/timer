@@ -29,6 +29,8 @@
    background: transparent;
    border: none;
    border-left:1px solid #242424;
+   font-size: 20px;
+   color: #242424;
  }
 
  nav button:hover {
@@ -44,8 +46,15 @@
   padding: 30px;
   background-color: #242424;
   border-radius: 10px 10px 0 0;
+  -webkit-box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.75);
+  box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.75);
 }
 
 ::ng-deep .list div.clock div p {
   font-size: 40px!important;
+}
+
+#playBtn i{
+  margin-right: 10px;
 }
